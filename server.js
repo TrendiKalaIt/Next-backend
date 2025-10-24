@@ -30,7 +30,9 @@ const app = express();
 const allowedOrigins = [
   "http://localhost:3000",
   "https://next-frontend-dwdpfvdsgabqc5ch.southeastasia-01.azurewebsites.net", 
-  "https://next-frontend-test-fjb8hqdrdjcmbagh.centralindia-01.azurewebsites.net"
+  "https://next-frontend-test-fjb8hqdrdjcmbagh.centralindia-01.azurewebsites.net",
+  "https://testing.trendikala.com"
+  
 ];
 
 app.use(cors({
