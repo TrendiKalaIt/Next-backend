@@ -105,7 +105,7 @@ exports.removeProduct = async (req, res) => {
 //         return res.status(401).json({ success: false, message: 'User ID is required' });
 //     }
 
-//     try {
+//     try {    
 //         const wishlist = await Wishlist.findOne({ user: userId }).populate('products.product').lean();
 
 //         if (!wishlist) {
@@ -129,7 +129,7 @@ exports.getWishlist = async (req, res) => {
         const wishlist = await Wishlist.findOne({ user: userId })
             .populate({
                 path: 'products.product',
-                select: 'productName slug category media sizes',
+                select: 'productName slug category media sizes colors',
                 populate: { path: 'category', select: 'name slug' }
             })
             .lean();
