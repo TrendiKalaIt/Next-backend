@@ -18,18 +18,19 @@ const addressSchema = new mongoose.Schema({
 const UserSchema = new mongoose.Schema({
   name: String,
   email: { type: String, required: true, unique: true, lowercase: true, trim: true },
-  mobile: { type: String, required: true, trim: true },
-  password: { type: String, required: true },
+  mobile: { type: String, trim: true },
+  password: { type: String },
   otp: String,
   otpExpires: Date,
   isVerified: { type: Boolean, default: false },
   profileImage: { type: String, default: "" },
   addresses: [addressSchema],
-  createdAt: { type: Date, default: Date.now },
+  googleId: { type: String, default: null },
+  authProvider: { type: String, default: "local" },
   //for reset password 
   resetPasswordToken: String,
   resetPasswordExpires: Date,
-
+  createdAt: { type: Date, default: Date.now },
 });
 
 const User = mongoose.models.User || mongoose.model('User', UserSchema);
