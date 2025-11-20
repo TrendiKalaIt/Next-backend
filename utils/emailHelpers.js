@@ -13,7 +13,7 @@ exports.getOrderSummaryTable = (orderItems, totalAmount, shippingCost) => {
       <td style="padding: 10px; border: 1px solid #ddd; text-align: left; font-size: 14px;">
         <strong>${item.productName}</strong><br />
         <span style="color: #666; font-size: 13px;">${item.domainName || ''}</span><br />
-         ${item.color?`Color : ${item.color}` : ''}${item.size?` | Size : ${item.size}` : ''}
+         ${item.color ? `Color : ${item.color}` : ''}${item.size ? ` | Size : ${item.size}` : ''}
       </td>
       <td style="padding: 10px; border: 1px solid #ddd; text-align: center; font-size: 14px;">
         ${item.quantity} ${item.unit || 'Unit'}
@@ -36,16 +36,16 @@ exports.getOrderSummaryTable = (orderItems, totalAmount, shippingCost) => {
       <tbody>
         ${orderItemsTableHtml}
         <tr>
-          <td colspan="2" style="padding: 10px; text-align: right; font-weight: bold; font-size: 14px; border: 1px solid #ddd;">Subtotal:</td>
-          <td style="padding: 10px; text-align: right; font-size: 14px; border: 1px solid #ddd;">₹${subtotal.toFixed(2)}</td>
-        </tr>
-        <tr>
           <td colspan="2" style="padding: 10px; text-align: right; font-weight: bold; font-size: 14px; border: 1px solid #ddd; color: green;">Discount:</td>
           <td style="padding: 10px; text-align: right; font-size: 14px; border: 1px solid #ddd; color: green;">- ₹${discount.toFixed(2)}</td>
         </tr>
         <tr>
           <td colspan="2" style="padding: 10px; text-align: right; font-weight: bold; font-size: 14px; border: 1px solid #ddd;">Shipping:</td>
           <td style="padding: 10px; text-align: right; font-size: 14px; border: 1px solid #ddd;">₹${shippingCost.toFixed(2)}</td>
+        </tr>
+        <tr>
+          <td colspan="2" style="padding: 10px; text-align: right; font-weight: bold; font-size: 14px; border: 1px solid #ddd;">Subtotal:</td>
+          <td style="padding: 10px; text-align: right; font-size: 14px; border: 1px solid #ddd;">₹${subtotal.toFixed(2)}</td>
         </tr>
         <tr>
           <td colspan="2" style="padding: 10px; text-align: right; font-weight: bold; font-size: 16px; border: 1px solid #ddd;">Total:</td>
