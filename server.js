@@ -85,7 +85,7 @@ app.post('/test', (req, res) => {
 
 // Root route
 app.get('/', (req, res) => {
-  res.send('API is working hello');
+  res.send('Trendikala Client Backend API is working fine.');
 });
 
 // Start the server
